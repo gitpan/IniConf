@@ -1,6 +1,7 @@
-require IniConf;
 use ExtUtils::MakeMaker;
+# See lib/ExtUtils/MakeMaker.pm for details of how to influence
+# the contents of the Makefile that is written.
 WriteMakefile(
-  NAME => "IniConf",
-  VERSION_FROM => 'IniConf.pm',
+    'NAME'	=> 'IniConf',
+    'VERSION_FROM' => 'IniConf.pm', # finds $VERSION
 );

@@ -1,6 +1,7 @@
+Changes
 IniConf.pm
 MANIFEST
 Makefile.PL
-Readme
-Changes
+test.pl
+test.ini
 

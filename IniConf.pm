@@ -1,31 +1,6 @@
 package IniConf;
-
-#
-# Version 0.93 1999/01/17
-# Rich Bowen
-# CHANGE: Allow spaces in parameter names
-# ADDED: newval method, to allow addition of new paramaters
-# ADDED: delval method, to allow deletions of parameters
-#
-# Version 0.92 1997/07/11
-# BUGFIX: Perl 5.004 complained about an extraneous "my" in ReadConfig()
-# BUGFIX: value of 0 or empty string would trigger a fallthrough to the 
-#         default value.  Check to see if this is defined now (in val()).
-# Version 0.91 1996/08/09
-# ADDED: support for multivalued/multiline fields.
-# ADDED: @IniConf::errors for diagnosing bad config file.
-# BUGFIX: added "require 5.002".  5.001 doesn't handle "use strict", and
-#         I live by it.
-# BUGFIX: OutputConfig.  Would complain about a bad ref when no comments
-#         are specified for a section or parameter.
-#
-# Version 0.90 1996/08/08
-# Initial revision
-#
-#
-
 require 5.002;
-$VERSION = 0.93;
+$VERSION = 0.95;
 
 use strict;
 use Carp;
