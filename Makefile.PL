@@ -3,5 +3,6 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
     'NAME'	=> 'IniConf',
+	'PREREQ_PM' => { 'Config::IniFiles' => 0 },
     'VERSION_FROM' => 'IniConf.pm', # finds $VERSION
 );

@@ -4,7 +4,7 @@ use strict;
 use Config::IniFiles;
 
 use vars       qw($VERSION @ISA);
-$VERSION = '1.02';
+$VERSION = '1.03';
 @ISA         = qw(Config::IniFiles);
 
 sub new {
