@@ -6,7 +6,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..5\n"; }
+BEGIN { $| = 1; print "1..6\n"; }
 END {print "not ok 1\n" unless $loaded;}
 use IniConf;
 $loaded = 1;
@@ -54,6 +54,15 @@ if ($value eq '') {
 	print "ok 5\n";
 } else {
 	print "not ok 5\n";
+}
+
+# test 6
+print "Weird characters in section name..... ";
+$value = $ini->val('[w]eird characters', 'multiline');
+if ($value eq "This\nis a multi-line\nvalue") {
+      print "ok 6\n";
+} else {
+      print "not ok 6\n";
 }
 
 

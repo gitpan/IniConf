@@ -1,6 +1,6 @@
 package IniConf;
 require 5.002;
-$VERSION = 0.95;
+$VERSION = 0.96;
 
 use strict;
 use Carp;
@@ -33,9 +33,16 @@ Optional named parameters may be specified after the configuration
 file name.  See the I<new> in the B<METHODS> section, below.
 
 INI files consist of a number of sections, each preceeded with the
-section name in square brackets.  Parameters are specified in each
-section as Name=Value.  Any spaces around the equals sign will be
-ignored, and the value extends to the end of the line
+section name in square brackets.  The first nonblank character of
+the line indicating a section must be a left bracket and the last
+nonblank character of a line indicating a section must be a right
+bracket. The characters making up the section name can be any 
+symbols at all. The section may even be be empty. However section
+names must be unique.
+
+Parameters are specified in each section as Name=Value.  Any spaces
+around the equals sign will be ignored, and the value extends to the
+end of the line
 
   [section]
   Parameter=Value
@@ -337,7 +344,7 @@ sub ReadConfig {
   open(CF, $self->{cf}) || carp "open $self->{cf}: $!";
   local $_;
   while (<CF>) {
-    chop;
+    chomp;
     $lineno++;
 
     if (/^\s*$/) {				# ignore blank lines
@@ -347,7 +354,7 @@ sub ReadConfig {
       push(@cmts, $_);
       next;
     }
-    elsif (/^\s*\[([^\]]+)\]\s*$/) {		# New Section
+    elsif (/^\s*\[(.*)\]\s*$/) {		# New Section
       $sect = $1;
       $sect = lc($sect) if $nocase;
       push(@{$self->{sects}}, $sect);
@@ -376,7 +383,7 @@ sub ReadConfig {
 	my $startline = $lineno;
 	my @val = ( );
 	while (<CF>) {
-	  chop;
+	  chomp;
 	  $lineno++;
 	  if ($_ eq $eotmark) {
 	    $foundeot = 1;
@@ -577,7 +584,7 @@ easy-to-maintain (and read) configuration files.
 
 =head1 VERSION
 
-Version 0.93
+Version 0.96
 
 =head1 AUTHOR
 
@@ -589,10 +596,22 @@ Version 0.93
 	E-Mail:			rbowen@rcbowen.com
 	URL: 			http://www.rcbowen.com/
 
+  Patches contributed by Bernie Cosell, Alex Satrapa, Scott Dellinger,
+  Steve Campbell, R. Bernsteid, and various other generous people. Thanks.
+
 =head1 COPYRIGHT
 
 Copyright (c) 1996,1997 Scott Hutton. All rights reserved. This program
 is free software; you can redistribute it and/or modify it under the
 same terms as Perl itself.
 
+=head1 To do
+
+In a soon-coming release, this code will move to the name C<Config::IniFiles>
+This is because there are a lot of configuration modules that are 
+floating around in various different name spaces. It would be nice if
+namespaces meant something. I don't know when that will be, but hopefully
+in the next few months.
+
 =cut
+
