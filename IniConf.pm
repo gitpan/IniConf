@@ -1,9 +1,11 @@
 package IniConf;
 
 #
-# $Id: IniConf.pm,v 1.2 1996/08/09 20:21:13 shutton Exp $
-# $Log: IniConf.pm,v $
-# Revision 1.2  1996/08/09  20:21:13  shutton
+# Version 0.92 1997/07/11
+# BUGFIX: Perl 5.004 complained about an extraneous "my" in ReadConfig()
+# BUGFIX: value of 0 or empty string would trigger a fallthrough to the 
+#         default value.  Check to see if this is defined now (in val()).
+# Version 0.91 1996/08/09
 # ADDED: support for multivalued/multiline fields.
 # ADDED: @IniConf::errors for diagnosing bad config file.
 # BUGFIX: added "require 5.002".  5.001 doesn't handle "use strict", and
@@ -11,13 +13,13 @@ package IniConf;
 # BUGFIX: OutputConfig.  Would complain about a bad ref when no comments
 #         are specified for a section or parameter.
 #
-# Revision 1.1  1996/08/08  13:33:55  shutton
+# Version 0.90 1996/08/08
 # Initial revision
 #
 #
 
 require 5.002;
-$VERSION = 0.91;
+$VERSION = 0.92;
 
 use strict;
 use Carp;
@@ -26,6 +28,10 @@ use vars qw( $VERSION @instance $instnum @oldhandler @errors );
 =head1 NAME
 
 IniConf - A Module for reading .ini-style configuration files
+
+=head1 SYNOPSIS
+
+  use IniConf;
 
 =head1 DESCRIPTION
 
@@ -234,7 +240,9 @@ sub val {
     $sect = lc($sect);
     $parm = lc($parm);
   }
-  my $val = $self->{v}{$sect}{$parm} || $self->{v}{$self->{default}}{$parm};
+  my $val = defined($self->{v}{$sect}{$parm}) ?
+	    $self->{v}{$sect}{$parm} :
+	    $self->{v}{$self->{default}}{$parm};
   if (ref($val) eq 'ARRAY') {
     return wantarray ? @$val : join($/, @$val);
   } else {
@@ -286,7 +294,7 @@ sub ReadConfig {
   local *CF;
   my($lineno, $sect);
   my($group, $groupmem);
-  my($parm, $value);
+  my($parm, $val);
   my @cmts;
   @errors = ( );
 
@@ -308,7 +316,6 @@ sub ReadConfig {
 
   open(CF, $self->{cf}) || carp "open $self->{cf}: $!";
   local $_;
-  my ($parm, $val);
   while (<CF>) {
     chop;
     $lineno++;
@@ -554,12 +561,14 @@ Version 0.9 (beta)
 
 =head1 AUTHOR
 
-Scott Hutton (shutton@indiana.edu)
+  Scott Hutton
+    E-Mail:        shutton@pobox.com
+    WWW Home Page: http://www.pobox.com/~shutton/
 
 =head1 COPYRIGHT
 
-Copyright (c) 1996 Scott Hutton. All rights reserved. This program is
-free software; you can redistribute it and/or modify it under the same
-terms as Perl itself.
+Copyright (c) 1996,1997 Scott Hutton. All rights reserved. This program
+is free software; you can redistribute it and/or modify it under the
+same terms as Perl itself.
 
 =cut
