@@ -1,8 +1,6 @@
 Changes
 IniConf.pm
 MANIFEST
+Readme
 Makefile.PL
 test.pl
-test.ini
-Readme
-
