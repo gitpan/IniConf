@@ -1,6 +1,12 @@
 package IniConf;
 
 #
+# Version 0.93 1999/01/17
+# Rich Bowen
+# CHANGE: Allow spaces in parameter names
+# ADDED: newval method, to allow addition of new paramaters
+# ADDED: delval method, to allow deletions of parameters
+#
 # Version 0.92 1997/07/11
 # BUGFIX: Perl 5.004 complained about an extraneous "my" in ReadConfig()
 # BUGFIX: value of 0 or empty string would trigger a fallthrough to the 
@@ -19,7 +25,7 @@ package IniConf;
 #
 
 require 5.002;
-$VERSION = 0.92;
+$VERSION = 0.93;
 
 use strict;
 use Carp;
@@ -280,6 +286,45 @@ sub setval {
   }
 }
 
+=head2 newval($setion, $parameter, $value [, $value2, ...])
+
+Adds a new value to the configuration file.
+
+=cut
+
+sub newval {
+  my $self = shift;
+  my $sect = shift;
+  my $parm = shift;
+  my @val  = @_;
+
+unless (defined($self->{v}{$sect}{$parm})) {
+	push(@{$self->{parms}{$sect}}, $parm);
+}
+if (@val > 1) {
+   	$self->{v}{$sect}{$parm} = \@val;
+   	} else {
+   	$self->{v}{$sect}{$parm} = shift @val;
+   	}
+   	return 1
+}
+
+=head2 delval($section, $parameter)
+
+Deletes the specified value from the configuration file
+
+=cut
+
+sub delval {
+  my $self = shift;
+  my $sect = shift;
+  my $parm = shift;
+
+	@{$self->{parms}{$sect}} = grep !/^$parm$/, @{$self->{parms}{$sect}};
+	delete $self->{v}{$sect}{$parm};
+	return 1
+}
+
 =head2 ReadConfig
 
 Forces the config file to be re-read.  Also see the I<-reloadsig>
@@ -346,7 +391,7 @@ sub ReadConfig {
 	$self->{v}{$sect} = {};
       }
     }
-    elsif (($parm, $val) = /\s*(\S+)\s*=\s*(.*)/) {	# new parameter
+    elsif (($parm, $val) = /\s*([\S\s]+?)\s*=\s*(.*)/) {	# new parameter
       $parm = lc($parm) if $nocase;
       $self->{pCMT}{$sect}{$parm} = [@cmts];
       @cmts = ( );
@@ -557,13 +602,17 @@ easy-to-maintain (and read) configuration files.
 
 =head1 VERSION
 
-Version 0.9 (beta)
+Version 0.93
 
 =head1 AUTHOR
 
   Scott Hutton
     E-Mail:        shutton@pobox.com
     WWW Home Page: http://www.pobox.com/~shutton/
+
+  Later hacked on by Rich Bowen
+	E-Mail:			rbowen@rcbowen.com
+	URL: 			http://www.rcbowen.com/
 
 =head1 COPYRIGHT
 

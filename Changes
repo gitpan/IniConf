@@ -1,0 +1,17 @@
+This module was originally written by Scott Hutton. If you know how
+to get hold of Scott, please let me know.
+I wanted a few small additional features, but was never able
+to track down Scott to submit patches, so I'm just rereleasing this
+myself. I suppose at some point, I'll need to actually read through
+all the code and try to figure out if anything else in here needs
+updating, but at the moment, I just needed to new functionality.
+
+So, the changes:
+1) Modified ReadConfig to permit spaces in the variable names
+2) Added newval method to add new values to the ini file
+3) Added delval method to delete values from the ini file
+
+Rich Bowen
+rbowen@rcbowen.com
+January 17, 2000
+
