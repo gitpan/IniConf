@@ -1,6 +1,6 @@
 package IniConf;
 require 5.002;
-$VERSION = 0.96;
+$VERSION = 0.97;
 
 use strict;
 use Carp;
@@ -584,7 +584,7 @@ easy-to-maintain (and read) configuration files.
 
 =head1 VERSION
 
-Version 0.96
+Version 0.97
 
 =head1 AUTHOR
 
